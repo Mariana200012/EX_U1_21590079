@@ -51,7 +51,20 @@ def add_post():
 
         return redirect(url_for('index'))
     
-    #Actualizar post
+    #Aqui sigue si es GET
+    categories = Category.query.all()
+    return render_template('create_post.html', categories=categories)
+
+#Eliminar post
+@app.route('/posts/delete/<int:id>')
+def delete_post(id):
+    post = Post.query.get(id)
+    if post:
+        db.session.delete(post)
+        db.session.commit()
+    return redirect(url_for('index'))
+
+#Actualizar post
 @app.route('/post/update/<int:id>', methods=['GET','POST'])
 def update_post(id):
     post = Post.query.get(id)
@@ -64,10 +77,6 @@ def update_post(id):
     
     categories = Category.query.all()
     return render_template('update_post.html', post=post, categories=categories)
-    
-    #Aqui sigue si es GET
-    categories = Category.query.all()
-    return render_template('create_post.html', categories=categories)
 
 if __name__ == '__main__':
     app.run(debug=True)
